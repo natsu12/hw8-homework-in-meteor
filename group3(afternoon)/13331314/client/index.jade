@@ -9,7 +9,7 @@ body
 				div.row
 					div.col-sm-6.col-md-4.col-md-offset-4
 						if isTeacher
-							h1.text-center.login-title Hello, professor {{user}}!
+							h1.text-center.login-title Hello, Professor {{user}}!
 						else
 							h1.text-center.login-title Welcome {{user}}, hard work is important!
 						h1.text-center.login-title {{> loginButtons}}
@@ -17,11 +17,12 @@ body
 							div
 								each homeworks
 									{{>homework}}
-						if isTeacher
-							a(class='btn btn-lg btn-info btn-block' id='publish') Create Homework
-							a(class='btn btn-lg btn-info btn-block' id='management') Manage All Requirements
-							a(class='btn btn-lg btn-info btn-block' id='grade') View All Submit
-				{{> manage}}
+				if isTeacher
+					{{> manage}}
+
+				each submits
+					{{> submit}}
+
 
 								
 			else
@@ -33,13 +34,31 @@ body
 template(name="homework")
 
 	div.homework
+		button(class="delete", style="float:right") &times;
 		p question : {{question}}
 		p from : {{teacher}}
 		p Requirements : {{requirement}}
 		p Deadline : {{deadline}}
+		p My Submit : {{mySubmit}}
+		p My Grade : {{myGrade}}
+
+
 		a(class='btn btn-lg btn-info btn-block' id='submit') Submit
 		if isSubmit
-			form(class='form-signin', id="submit")
-				textarea(class="form-control" rows="5" cols="50" name="submit" placeholder='submit')
-				button(class='btn btn-lg btn-primary btn-block submit', type='submit') Submit
+			form(class='form-signin' id="homework-submit")
+				textarea(class="form-control" rows="5" cols="50" name="answer" placeholder='submit')
+				input(class="form-control"  disabled="disabled" name="question" value="{{question}}")
+				button(class='btn btn-lg btn-primary btn-block', type='submit') Submit
 	hr
+
+template(name="submit")
+	div.row
+		div.col-sm-6.col-md-4.col-md-offset-4
+			h1.text-center.login-title Grading
+			div.signup-wall
+				div.homework
+					p question : {{question}}
+					p name : {{user}}
+					p answer : {{answer}}
+					input(class="form-control" id="grade" name="grade" value="{{grade}}")
+
