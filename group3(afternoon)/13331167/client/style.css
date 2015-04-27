@@ -1,3 +1,7 @@
+* {
+  font-family: '微软雅黑', Arial;
+}
+
 a:hover {
   text-decoration: none;
 }
