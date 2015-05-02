@@ -7,7 +7,8 @@ body
 		if currentUser
 			if identity
 				div.row
-					div.col-sm-6.col-md-4.col-md-offset-4
+
+					div.col-md-4
 						if isTeacher
 							h1.text-center.login-title Hello, Professor {{user}}!
 						else
@@ -17,11 +18,11 @@ body
 							div
 								each homeworks
 									{{>homework}}
-				if isTeacher
-					{{> manage}}
-				
-					each submits
-						{{> submit}}
+					if isTeacher
+						{{> manage}}
+					
+						each submits
+							{{> submit}}
 
 
 								
@@ -31,10 +32,12 @@ body
 		else
 			{{> account}}
 
+
 template(name="homework")
 
 	div.homework
-		button(class="delete", style="float:right") &times;
+		if isTeacher
+			button(class="delete", style="float:right") &times;
 		p question : {{question}}
 		p from : {{teacher}}
 		p Requirements : {{requirement}}
@@ -52,13 +55,15 @@ template(name="homework")
 	hr
 
 template(name="submit")
-	div.row
-		div.col-sm-6.col-md-4.col-md-offset-4
+		div.col-md-4
 			h1.text-center.login-title Grading
 			div.signup-wall
 				div.homework
+					if isTeacher
+						button(class="delete", style="float:right") &times;
 					p question : {{question}}
 					p name : {{user}}
 					p answer : {{answer}}
-					input(class="form-control" id="grade" name="grade" value="{{grade}}")
+					p Grade : 
+						input(class="form-control" id="grade" name="grade" placeholder="{{grade}}")
 
