@@ -13,6 +13,17 @@ Template['deal_homework'].helpers {
         return true
       else
         return false
+
+  is-student: (username)->
+    users = userstatus2.find {
+      username: username
+    } .fetch!
+    for user in users
+      console.log user
+      if user.status == 'student'
+        return true
+      else
+        return false
 }
 
 Template['deal_homework'].events {
