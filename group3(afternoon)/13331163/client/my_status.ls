@@ -12,6 +12,16 @@ Template['my_status'].helpers {
       else
         return false
 
+  is-teacher: (username)->
+    users = userstatus2.find {
+      username: username
+    } .fetch!
+    for user in users
+      if user.status == 'teacher'
+        return true
+      else
+        return false
+        
   username: ->
     return Meteor.user!.username
 }
