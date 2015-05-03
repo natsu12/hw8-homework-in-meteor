@@ -102,12 +102,23 @@ Meteor.methods
         return if not validateRole 'Teacher'
         # validate args
         return if not validateArgs arguments, [validString, validString, validString, validDate]
-        # update
-        Homeworks.update {_id: id}, $set:
+        # update (validating deadline)
+        count = Homeworks.update {
+            _id: id
+            deadline:
+                $gt: new Date
+        }, $set:
             title: title
             details: details
             deadline: deadline
-        return msg: 'ok'
+        homework = Homeworks.find(_id: id).fetch()[0]
+        if count
+            return {
+                msg: 'ok'
+                homework: homework
+            }
+        else
+            return
 
     grade: (id, username, score)->
         # validate role
@@ -116,6 +127,8 @@ Meteor.methods
         return if not validateArgs arguments, [validString, validString, validString]
         # query the homework
         homework = Homeworks.find(_id: id).fetch()[0]
+        # validate deadline
+        return if homework.deadline > new Date
         # find and modify the submit
         submits = homework.submits
         submits.forEach (submit)-> submit.score = score if submit.username == username
@@ -130,6 +143,8 @@ Meteor.methods
         return if not validateArgs arguments, [validString, validString]
         # query the homework
         homework = Homeworks.find(_id: id).fetch()[0]
+        # validate deadline
+        return if homework.deadline < new Date
         submits = homework.submits
         username = ServerSession.get('myUser').username
         submitExists = false

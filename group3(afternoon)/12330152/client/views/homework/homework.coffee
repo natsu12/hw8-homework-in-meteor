@@ -13,8 +13,11 @@ Template.homework.helpers
     isTeacher: utils.isTeacher
 
 Template.homework.onCreated ()->
-    self = this
-    self.homework = new ReactiveVar null
+    self = Template.instance()
+    self.homework = new ReactiveVar null, (a, b)->
+        return true if (not a) and (not b)
+        return false if not (a and b)
+        return a.title == b.title and a.details == b.details and a.deadline == b.deadline
     id = Session.get 'homework-id'
     Meteor.call 'getHomework', id, utils.methodHandler((res)->
         homework = res.homework
@@ -34,7 +37,11 @@ Template.homework.events
         title = form.title.value
         details = form.details.value
         deadline = new Date form.deadline.value
-        Meteor.call 'modifyHomework', id, title, details, deadline, utils.methodHandler(()->alert 'ok')
+        self = Template.instance()
+        Meteor.call 'modifyHomework', id, title, details, deadline, utils.methodHandler((res)->
+            alert 'ok'
+            self.homework.set res.homework
+        )
         return false
     'submit .grade-form': (evt)->
         id = Session.get 'homework-id'

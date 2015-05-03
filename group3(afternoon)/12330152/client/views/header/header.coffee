@@ -1,5 +1,5 @@
 Template.header.helpers
-    user: ()-> Session.get('myUser')
+    user: utils.getUser
 
 Template.header.events
     'click #logoutAnchor': ()->

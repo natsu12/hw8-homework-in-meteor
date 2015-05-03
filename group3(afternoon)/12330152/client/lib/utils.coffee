@@ -1,3 +1,8 @@
+window.myUser = new ReactiveVar null, (a, b)->
+    return true if (not a) and (not b)
+    return false if not (a and b)
+    return a.username == b.username
+
 exports = {}
 
 exports.setView  = (view)-> Session.set 'view', view

@@ -3,7 +3,7 @@ Template.framework.onRendered ()->
 
 Template.framework.helpers
     view: ()-> Session.get 'view'
-    user: ()-> Session.get 'myUser'
+    user: utils.getUser
 
 Template.framework.events
     'click a': (evt)->
